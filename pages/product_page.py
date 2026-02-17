@@ -16,28 +16,34 @@ class ProductPage(BasePage):
             button = self.wait_for_clickable(loc.ADD_ONE_BUTTON)
             button.click()
 
-    def add_to_cart(self):
-        self.wait_for_clickable(loc.ADD_TO_CART_BUTTON).click()
-
-    def wait_cart_counter_is(self, expected_value):
+    def wait_until_cart_counter_is(self, expected_value):
         self.wait.until(
-            lambda d: d.find_element(
+            lambda driver: driver.find_element(
                 *loc.CART_COUNTER
             ).text == str(expected_value)
         )
 
+    def add_to_cart(self):
+        self.wait_for_clickable(loc.ADD_TO_CART_BUTTON).click()
+
+    def get_cart_counter_value(self):
+        counter = self.wait_for_visibility(loc.CART_COUNTER)
+        return counter.text.strip()
+
     def go_to_cart(self):
         self.wait_for_clickable(loc.CART_LINK).click()
 
-    def check_product_main_info_is_displayed(self):
+    def get_title_text(self):
         title = self.wait_for_visibility(loc.TITLE)
-        assert title.text.strip() != ""
+        return title.text.strip()
 
+    def get_price_text(self):
         price = self.wait_for_visibility(loc.PRICE)
-        assert price.text.strip() != ""
+        return price.text.strip()
 
-        add_button = self.wait_for_clickable(loc.ADD_TO_CART_BUTTON)
-        assert add_button.is_displayed()
+    def is_add_to_cart_button_visible(self):
+        button = self.wait_for_clickable(loc.ADD_TO_CART_BUTTON)
+        return button.is_displayed()
 
     def add_product_to_cart(self):
-        self.wait_for_clickable(loc.ADD_TO_CART_BUTTON).click()
+        self.add_to_cart()

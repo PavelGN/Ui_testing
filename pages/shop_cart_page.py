@@ -8,28 +8,26 @@ from pages.locators.shop_cart_locators import ShopCartLocators as loc
 class ShopCartPage(BasePage):
     page_url = '/shop/cart'
 
-    def check_title_is(self, expected_text):
-        element = self.wait.until(
-            EC.visibility_of_element_located(loc.TITLE)
-        )
-        assert element.text.strip() == expected_text
+    def get_title_text(self):
+        element = self.wait_for_visibility(loc.TITLE)
+        return element.text.strip()
 
-    def check_empty_cart_message_is(self, expected_text):
-        element = self.wait.until(
-            EC.visibility_of_element_located(loc.EMPTY_CART_MESSAGE)
-        )
-        assert element.text.strip() == expected_text
+    def get_empty_cart_message(self):
+        element = self.wait_for_visibility(loc.EMPTY_CART_MESSAGE)
+        return element.text.strip()
 
-    def check_checkout_steps_are_visible(self):
-        expected_steps = ["Review Order", "Shipping", "Payment"]
+    def get_checkout_steps(self):
+        steps = ["Review Order", "Shipping", "Payment"]
+        visible_steps = []
 
-        for step in expected_steps:
-            element = self.wait.until(
-                EC.visibility_of_element_located(
-                    (By.XPATH, f"//span[normalize-space()='{step}']")
-                )
+        for step in steps:
+            element = self.wait_for_visibility(
+                (By.XPATH, f"//span[normalize-space()='{step}']")
             )
-            assert element.is_displayed()
+            if element.is_displayed():
+                visible_steps.append(step)
+
+        return visible_steps
 
     def get_product_quantity(self):
         quantity = self.wait_for_visibility((By.CLASS_NAME, "js_quantity"))
@@ -37,11 +35,5 @@ class ShopCartPage(BasePage):
 
     def remove_product(self):
         product_row = self.wait_for_visibility(loc.PRODUCT_ROW)
-
         self.wait_for_clickable(loc.REMOVE_ONE_BUTTON).click()
-
         self.wait.until(EC.staleness_of(product_row))
-
-    def check_cart_is_empty(self):
-        empty_message = self.wait_for_visibility(loc.EMPTY_CART_MESSAGE)
-        assert empty_message.text.strip() == "Your cart is empty!"

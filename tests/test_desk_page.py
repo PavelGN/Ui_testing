@@ -1,22 +1,26 @@
-from pages.shop_desk_page import ShopDeskPage
+def test_products_sorted_by_price(desk_page):
+    desk_page.open_page()
+
+    desk_page.apply_sorting_by_price_low_to_high()
+    prices = desk_page.get_prices()
+
+    assert prices == sorted(prices)
 
 
-def test_products_sorted_by_price(driver):
-    page = ShopDeskPage(driver)
-    page.open_page()
+def test_all_products_have_price(desk_page):
+    desk_page.open_page()
 
-    page.check_products_are_sorted_by_price_low_to_high()
-
-
-def test_all_products_have_price(driver):
-    page = ShopDeskPage(driver)
-    page.open_page()
-
-    page.check_all_products_have_price()
+    assert desk_page.get_products_count() > 0
+    assert desk_page.all_products_have_price()
 
 
-def test_steel_filter_changes_products(driver):
-    page = ShopDeskPage(driver)
-    page.open_page()
+def test_steel_filter_changes_products(desk_page):
+    desk_page.open_page()
 
-    page.check_steel_filter_changes_products()
+    old_count = desk_page.get_products_count()
+
+    desk_page.apply_steel_filter()
+
+    new_count = desk_page.get_products_count()
+
+    assert new_count != old_count

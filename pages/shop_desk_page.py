@@ -7,58 +7,31 @@ from pages.locators.shop_desk_locators import ShopDeskLocators as loc
 class ShopDeskPage(BasePage):
     page_url = "/shop/category/desks-1"
 
-    def check_products_are_sorted_by_price_low_to_high(self):
-        sort_button = self.wait.until(
-            EC.element_to_be_clickable(loc.SORT_DROPDOWN)
-        )
-        sort_button.click()
+    def apply_sorting_by_price_low_to_high(self):
+        self.wait_for_clickable(loc.SORT_DROPDOWN).click()
+        self.wait_for_clickable(loc.SORT_LOW_TO_HIGH).click()
 
-        self.wait.until(
-            EC.element_to_be_clickable(loc.SORT_LOW_TO_HIGH)
-        ).click()
-
-        prices = self.wait.until(
-            EC.visibility_of_all_elements_located(loc.PRODUCT_PRICES)
-        )
-
-        price_values = [
+    def get_prices(self):
+        prices = self.wait_for_all_visible(loc.PRODUCT_PRICES)
+        return [
             float(price.text.replace("$", "").replace(",", "").strip())
             for price in prices
         ]
 
-        assert price_values == sorted(price_values)
+    def get_products_count(self):
+        products = self.wait_for_all_visible(loc.PRODUCTS)
+        return len(products)
 
-    def check_all_products_have_price(self):
-        products = self.wait.until(
-            EC.visibility_of_all_elements_located(loc.PRODUCTS)
-        )
-
-        assert len(products) > 0
+    def all_products_have_price(self):
+        products = self.wait_for_all_visible(loc.PRODUCTS)
 
         for product in products:
             price = product.find_element(*loc.PRODUCT_PRICE)
-            assert price.text.strip() != ""
+            if not price.text.strip():
+                return False
+        return True
 
-    def check_steel_filter_changes_products(self):
-        self.wait.until(
-            EC.visibility_of_element_located(loc.PRICE_SLIDER_READY)
-        )
-
-        old_products = self.wait.until(
-            EC.visibility_of_all_elements_located(loc.PRODUCTS)
-        )
-        old_count = len(old_products)
-
-        steel_filter = self.wait.until(
-            EC.element_to_be_clickable(loc.STEEL_FILTER)
-        )
-        steel_filter.click()
-
+    def apply_steel_filter(self):
+        self.wait_for_visibility(loc.PRICE_SLIDER_READY)
+        self.wait_for_clickable(loc.STEEL_FILTER).click()
         self.wait.until(EC.url_contains("attrib=1-1"))
-
-        new_products = self.wait.until(
-            EC.visibility_of_all_elements_located(loc.PRODUCTS)
-        )
-        new_count = len(new_products)
-
-        assert new_count != old_count
