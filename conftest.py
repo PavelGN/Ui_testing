@@ -1,5 +1,7 @@
+import os
 import pytest
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 
 from pages.shop_cart_page import ShopCartPage
 from pages.shop_desk_page import ShopDeskPage
@@ -8,9 +10,18 @@ from pages.product_page import ProductPage
 
 @pytest.fixture()
 def driver():
-    driver = webdriver.Chrome()
+    options = Options()
+
+    if os.getenv("CI") == "true":
+        options.add_argument("--headless=new")
+        options.add_argument("--no-sandbox")
+        options.add_argument("--disable-dev-shm-usage")
+
+    driver = webdriver.Chrome(options=options)
     driver.maximize_window()
+
     yield driver
+
     driver.quit()
 
 
