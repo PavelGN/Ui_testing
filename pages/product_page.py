@@ -2,6 +2,7 @@ from pages.base_page import BasePage
 from pages.locators.shop_product_page_locators import (
     ProductPageLocators as loc
 )
+from selenium.webdriver.support import expected_conditions as EC
 
 
 class ProductPage(BasePage):
@@ -25,8 +26,17 @@ class ProductPage(BasePage):
 
     def increase_quantity(self, times=1):
         for _ in range(times):
+            quantity_input = self.driver.find_element(*loc.QUANTITY_INPUT)
+            old_value = int(quantity_input.get_attribute("value"))
+
             button = self.wait_for_clickable(loc.ADD_ONE_BUTTON)
             button.click()
+
+            self.wait.until(
+                lambda d: int(
+                    d.find_element(*loc.QUANTITY_INPUT).get_attribute("value")
+                ) > old_value
+            )
 
 
     def add_to_cart(self):
@@ -34,9 +44,9 @@ class ProductPage(BasePage):
 
     def wait_until_cart_counter_is(self, expected_value):
         self.wait.until(
-            lambda driver: driver.find_element(
-                *loc.CART_COUNTER
-            ).text == str(expected_value)
+            EC.text_to_be_present_in_element(
+                loc.CART_COUNTER, str(expected_value)
+            )
         )
 
     def check_cart_counter_is(self, expected_value):
