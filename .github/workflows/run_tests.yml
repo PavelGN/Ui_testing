@@ -74,4 +74,4 @@ jobs:
         uses: actions/upload-pages-artifact@v3
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: ctions/deploy-pages@v4
+        uses: actions/deploy-pages@v4
