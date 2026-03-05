@@ -49,7 +49,7 @@ jobs:
         distribution: 'microsoft' # See 'Supported distributions' for available options
         java-version: '25'
      - name: Install Allure
-       run: 
+       run: | 
          sudo wget https://github.com/allure-framework/allure2/releases/latest/download/allure-2.29.0.tgz
          sudo tar -zxvf allure-2.29.0.tgz
          sudo mv allure-2.29.0 /opt/allure
