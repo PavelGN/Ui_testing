@@ -50,8 +50,8 @@ jobs:
         java-version: '25'
      - name: Install Allure
        run: 
-         wget https://github.com/allure-framework/allure2/releases/latest/download/allure-2.29.0.tgz
-         tar -zxvf allure-2.29.0.tgz
+         sudo wget https://github.com/allure-framework/allure2/releases/latest/download/allure-2.29.0.tgz
+         sudo tar -zxvf allure-2.29.0.tgz
          sudo mv allure-2.29.0 /opt/allure
          sudo ln -s /opt/allure/bin/allure /usr/bin/allure
      - name: Generate report
@@ -66,6 +66,7 @@ jobs:
   publish-report:
     name: Report publication
     runs-on: ubuntu-latest
+    needs: run-tests
     steps:
       - name: Download artifacts
         uses: actions/download-artifact@v5
