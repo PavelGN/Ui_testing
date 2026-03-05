@@ -50,9 +50,9 @@ jobs:
         java-version: '25'
      - name: Install Allure
        run: | 
-         sudo wget https://github.com/allure-framework/allure2/releases/latest/download/allure-2.29.0.tgz
-         sudo tar -zxvf allure-2.29.0.tgz
-         sudo mv allure-2.29.0 /opt/allure
+         wget https://github.com/allure-framework/allure2/releases/latest/download/allure-2.37.0.tgz
+         tar -zxvf allure-2.37.0.tgz
+         sudo mv allure-2.37.0 /opt/allure
          sudo ln -s /opt/allure/bin/allure /usr/bin/allure
      - name: Generate report
        run: allure generate -c allure-results -o _site
