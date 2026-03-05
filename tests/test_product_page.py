@@ -1,8 +1,13 @@
+import pytest
+
+
+@pytest.mark.extended
 def test_product_main_info_is_displayed(product_page):
     product_page.open_page()
     product_page.check_product_main_info_is_displayed()
 
 
+@pytest.mark.extended
 def test_product_quantity_adds_correctly_to_cart(product_page, cart_page):
     product_page.open_page()
 
@@ -18,6 +23,7 @@ def test_product_quantity_adds_correctly_to_cart(product_page, cart_page):
     cart_page.check_product_quantity_is(3)
 
 
+@pytest.mark.extended
 def test_product_can_be_removed_from_cart(product_page, cart_page):
     product_page.open_page()
 

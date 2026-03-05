@@ -1,3 +1,7 @@
+import pytest
+
+
+@pytest.mark.regression
 def test_products_sorted_by_price(desk_page):
     desk_page.open_page()
 
@@ -5,12 +9,14 @@ def test_products_sorted_by_price(desk_page):
     desk_page.check_products_are_sorted_by_price_low_to_high()
 
 
+@pytest.mark.regression
 def test_all_products_have_price(desk_page):
     desk_page.open_page()
 
     desk_page.check_all_products_have_price()
 
 
+@pytest.mark.regression
 def test_steel_filter_changes_products(desk_page):
     desk_page.open_page()
 
